@@ -1,0 +1,5 @@
+title 0.6 New note
+
+browser->server: HTTP-POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server->browser: {content: "test",date: "2020-06-02T18:04:01.720Z"} 
+note over browser: Then the event handler creates a new note, \nadds it to the notes list with the command \nnotes.push(note), rerenders the note list on \nthe page and sends the new note to the server.
