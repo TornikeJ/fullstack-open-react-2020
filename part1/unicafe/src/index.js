@@ -16,6 +16,9 @@ const Result = (props) => {
       <p>good {props.result.good}</p>
       <p>neutral {props.result.neutral}</p>
       <p>bad {props.result.bad}</p>
+      <p>all {props.result.all}</p>
+      <p>average {props.result.average}</p>
+      <p>positive {props.result.positive} %</p>
     </>
   )
 }
@@ -26,13 +29,29 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  
+  const sum=()=>{
+    return good+neutral+bad;
+  }
+
+  const average=()=>{
+    return (good*1+neutral*0+bad*-1)/sum();
+  }
+  
+  const positive=()=>{
+    return good*100/sum();
+  }
+
   const feedback={
     title:"give feedback",
     result:{
       title:"statistics",
       good,
       neutral,
-      bad
+      bad,
+      all:sum(),
+      average:average() || 0,
+      positive:positive() || 0
     }
   }  
 
