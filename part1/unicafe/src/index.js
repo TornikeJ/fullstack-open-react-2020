@@ -9,6 +9,12 @@ const Header = (props) => {
   )
 }
 
+const Statistic = (props) =>{
+  return(
+  <p>{props.text} {props.value} {props.text === 'positive' ? '%': ''}</p>
+  )
+}
+
 const Statistics = (props) => {
   if(props.result.good === 0 && props.result.neutral === 0 && props.result.bad === 0 ){
     return (
@@ -22,16 +28,21 @@ const Statistics = (props) => {
   return (
     <>
       <h1>{props.result.title}</h1>
-      <p>good {props.result.good}</p>
-      <p>neutral {props.result.neutral}</p>
-      <p>bad {props.result.bad}</p>
-      <p>all {props.result.all}</p>
-      <p>average {props.result.average}</p>
-      <p>positive {props.result.positive} %</p>
+      <Statistic text="good" value={props.result.good}/>
+      <Statistic text="neutral" value={props.result.neutral}/>
+      <Statistic text="bad" value={props.result.bad}/>
+      <Statistic text="all" value={props.result.all}/>
+      <Statistic text="average" value={props.result.average}/>
+      <Statistic text="positive" value={props.result.positive}/>
     </>
   )
 }
 
+const Button = (props) => {
+  return (
+    <button onClick={props.handleClick}>{props.name}</button>
+  )
+}
 
 const App = () => {
   // save clicks of each button to own state
@@ -67,9 +78,9 @@ const App = () => {
   return (
     <div>
       <Header title={feedback.title} />
-      <button onClick={()=>setGood(good+1)}>good</button>
-      <button onClick={()=>setNeutral(neutral+1)}>neutral</button>
-      <button onClick={()=>setBad(bad+1)}>bad</button>
+      <Button handleClick={()=>setGood(good+1)} name={'good'}/>
+      <Button handleClick={()=>setNeutral(neutral+1)} name={'neutral'}/>
+      <Button handleClick={()=>setBad(bad+1)} name={'bad'} />
       <Statistics result={feedback.result} />
     </div>
   )
