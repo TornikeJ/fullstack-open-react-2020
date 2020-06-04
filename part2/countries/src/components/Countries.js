@@ -1,7 +1,15 @@
 import React from 'react'
 import Country from './Country'
+import { useState } from 'react'
 
 const Countries = (props) => {
+
+    const[showView, setShowView]=useState({});
+    
+    const updateShowView = (name) =>{
+        setShowView({...showView, [name]: !(!!showView[name])});
+    }
+
     return(
         <div>
             {
@@ -18,7 +26,26 @@ const Countries = (props) => {
                 props.filter.length > 10? 
                 'Too many matches, specify another filter' :
                 props.filter
-                .map(country=> <p key={country.name}>{country.name} {country.number}</p>)
+                .map(country=> {
+                   return (
+                    <div key={country.name}>
+                        <span>{country.name} {country.number}</span>
+                        <button onClick={()=>updateShowView(country.name)}>show</button>
+                        {
+                            showView[country.name]?
+                                <Country
+                                    name={country.name}
+                                    capital={country.capital}
+                                    population={country.population}
+                                    languages={country.languages}
+                                    flag={country.flag}
+                                />
+                                : 
+                                null                         
+                        }
+                    </div>
+                    )
+                })
             }
         </div>
     )
