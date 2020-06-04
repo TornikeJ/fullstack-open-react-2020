@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personsService from '../services/persons';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
@@ -8,8 +8,8 @@ const App = () => {
   const [ persons, setPersons ] = useState([]); 
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personsService
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
@@ -28,10 +28,9 @@ const App = () => {
       if(persons.map(person=>person.name).indexOf(newName) === -1){
           const personObject={name:newName,number:newPhone};
 
-          axios
-          .post('http://localhost:3001/persons', personObject)
+          personsService
+          .create(personObject)
           .then(response => {
-            console.log(response.data)
             setPersons(persons.concat(response.data))
             setNewName('');
             setNewPhone('');
