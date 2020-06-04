@@ -8,8 +8,12 @@ const App = () => {
 
   const addName = (event) =>{
       event.preventDefault();
-      setPersons([...persons,{name:newName}]);
-      setNewName('');
+      if(persons.map(person=>person.name).indexOf(newName) === -1){
+          setPersons([...persons,{name:newName}]);
+          setNewName('');
+      } else{
+          alert(`${newName} is already added to phonebook`);
+      }
   }
 
   const updateInput = (event) =>{
