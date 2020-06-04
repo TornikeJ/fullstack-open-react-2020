@@ -8,7 +8,6 @@ const App = () => {
   const [ persons, setPersons ] = useState([]); 
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
@@ -17,6 +16,9 @@ const App = () => {
       })
   }, [])
 
+
+
+
   const [ newName, setNewName ] = useState('');
   const [ newPhone, setNewPhone ] = useState('');
   const [ newFilter, setNewFilter ] = useState('');
@@ -24,9 +26,16 @@ const App = () => {
   const addName = (event) =>{
       event.preventDefault();
       if(persons.map(person=>person.name).indexOf(newName) === -1){
-          setPersons([...persons,{name:newName,number:newPhone}]);
-          setNewName('');
-          setNewPhone('');
+          const personObject={name:newName,number:newPhone};
+
+          axios
+          .post('http://localhost:3001/persons', personObject)
+          .then(response => {
+            console.log(response.data)
+            setPersons(persons.concat(response.data))
+            setNewName('');
+            setNewPhone('');
+          })
       } else{
           alert(`${newName} is already added to phonebook`);
       }
