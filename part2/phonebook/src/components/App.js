@@ -3,6 +3,7 @@ import personsService from '../services/persons';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
+import Notification from './Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]); 
@@ -16,12 +17,11 @@ const App = () => {
       })
   }, [])
 
-
-
-
   const [ newName, setNewName ] = useState('');
   const [ newPhone, setNewPhone ] = useState('');
   const [ newFilter, setNewFilter ] = useState('');
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const addName = (event) =>{
       event.preventDefault();
@@ -31,7 +31,14 @@ const App = () => {
           personsService
           .create(personObject)
           .then(response => {
-            setPersons(persons.concat(response.data))
+            setPersons(persons.concat(response.data));
+            setSuccessMessage(
+              `Number was added`
+            )
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000);
+
             setNewName('');
             setNewPhone('');
           })
@@ -42,10 +49,27 @@ const App = () => {
           personsService
             .update(person.id,newPerson)
             .then(() => {
-              setPersons(persons.map(personDb => personDb.id !== person.id? personDb: newPerson))
+              setPersons(persons.map(personDb => personDb.id !== person.id? personDb: newPerson));
+              setSuccessMessage(
+                `Number was updated`
+              )
+              setTimeout(() => {
+                setSuccessMessage(null)
+              }, 5000);
+
               setNewName('');
               setNewPhone('');
-            })      
+            })
+            .catch(error => {
+              setErrorMessage(
+                `Person ${person.name} was already removed from server`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+
+              setPersons(persons.filter(n => n.id !== person.id))  
+            })    
           }
       }
   }
@@ -82,6 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification errorMessage={errorMessage} successMessage={successMessage} />
       <Filter value={newFilter} handleChange={updateFilter}/>
       <h2>Add a new</h2>
       <PersonForm 
