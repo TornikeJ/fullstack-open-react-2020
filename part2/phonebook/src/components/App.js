@@ -52,6 +52,18 @@ const App = () => {
     setNewFilter(event.target.value);
   }
 
+  const deleteNumber = (person) =>{
+ 
+    if (window.confirm(`Delete ${person.name} ?`)) { 
+        personsService
+            .deleteUser(person.id)
+            .then(() => {
+                setPersons(persons.filter(data=> data.id !== person.id))
+            })
+    }
+}
+
+
   const personsToShow=newFilter? 
   persons.filter(person=>person.name.toLowerCase().indexOf(newFilter.toLowerCase()) !== -1) 
   : persons;
@@ -70,7 +82,7 @@ const App = () => {
         handlePhoneUpdate={updatePhone} 
     />
       <h2>Numbers</h2>
-      <Persons filter={personsToShow}/>
+      <Persons filter={personsToShow} handleDelete={deleteNumber}/>
     </div>
   )
 }

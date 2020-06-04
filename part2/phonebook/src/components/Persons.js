@@ -2,9 +2,17 @@
 import React from 'react'
 
 const Persons = (props) => {
-    return(
+
+     return(
         <div>
-            {props.filter.map(person=> <p key={person.name}>{person.name} {person.number}</p>)}
+            {props.filter.map(person=>{
+                return(
+                    <div key={person.name}>
+                        <span>{person.name} {person.number}</span>
+                        <button onClick={()=>props.handleDelete(person)}>delete</button>
+                    </div>
+                )}) 
+            }
         </div>
     )
 }
