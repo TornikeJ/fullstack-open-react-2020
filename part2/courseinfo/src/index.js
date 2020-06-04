@@ -8,10 +8,9 @@ const Header = ({ course }) => {
 }
 
 const Total = ({ course }) => {
-  let sum = 0;
-  course.parts.forEach(part => {
-    sum += part.exercises;
-  })
+  const sum=course.parts.reduce((acc,cur) => {
+    return acc + cur.exercises
+  },0)
 
   return(
     <h4>total of {sum} exercises</h4>
