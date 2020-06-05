@@ -30,8 +30,8 @@ const App = () => {
 
           personsService
           .create(personObject)
-          .then(response => {
-            setPersons(persons.concat(response.data));
+          .then(() => {
+            setPersons(persons.concat(personObject));
             setSuccessMessage(
               `Number was added`
             )
