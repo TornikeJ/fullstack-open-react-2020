@@ -1,6 +1,6 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001/api/persons';
-// const baseUrl = 'https://salty-river-40592.herokuapp.com/api/persons';
+//const baseUrl = '/api/persons'; prodaction build
 
 const getAll = () => {
     return axios.get(baseUrl)
