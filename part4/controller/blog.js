@@ -1,4 +1,5 @@
-const app = require('express').Router()
+const express = require('express')
+const app=express();
 const Blog = require('../models/block')
 
 app.get('/api/blogs', (request, response) => {
