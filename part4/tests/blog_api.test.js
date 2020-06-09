@@ -18,6 +18,13 @@ test('returned blogs length', async () => {
 
 })
 
+test('check id property existence', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body[0].id).toBeDefined();
+
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
