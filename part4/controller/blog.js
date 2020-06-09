@@ -1,7 +1,7 @@
 const express = require('express')
 const app=express();
 app.use(express.json())
-const Blog = require('../models/block')
+const Blog = require('../models/blog')
 
 app.get('/api/blogs', (request, response) => {
     Blog
@@ -29,6 +29,17 @@ app.get('/api/blogs', (request, response) => {
     try {
       await Blog.findByIdAndRemove(request.params.id)
       response.status(204).end()
+    } catch (exception) {
+      next(exception)
+    }
+  })
+
+  app.put('/api/blogs/:id', async (request, response, next) => {
+    try {
+        console.log(request.body);
+      await Blog.findByIdAndUpdate(request.params.id,
+        request.body)
+      response.status(200).end()
     } catch (exception) {
       next(exception)
     }
