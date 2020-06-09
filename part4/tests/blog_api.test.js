@@ -14,7 +14,7 @@ test("blogs are returned as json", async () => {
 test("returned blogs length", async () => {
   const response = await api.get("/api/blogs");
 
-  expect(response.body).toHaveLength(3);
+  expect(response.body).toHaveLength(4);
 });
 
 test("check id property existence", async () => {
@@ -36,6 +36,20 @@ test("check post method", async () => {
   const afterpost=await api.get("/api/blogs");
   
   expect(beforePost.body).toHaveLength(afterpost.body.length-1);
+});
+
+
+test("check without likes property", async () => {
+ 
+  await api.post("/api/blogs").send({
+    title: "x",
+    author: "anon",
+    url: "lala"
+  });
+
+  const afterpost=await api.get("/api/blogs");
+  
+  expect(afterpost.body[afterpost.body.length-1].likes).toBe(0);
 });
 
 afterAll(() => {
