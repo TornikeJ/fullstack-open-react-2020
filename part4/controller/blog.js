@@ -51,12 +51,19 @@ app.post("/api/blogs", async (request, response) => {
   }
 });
 
-app.delete("/api/blogs/:id", async (request, response, next) => {
+app.delete("/api/blogs/:id", async (request, response) => {
+
   try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    const blog=await Blog.findById(request.params.id);
+
+    if (!decodedToken || !decodedToken.id || decodedToken.id !== blog.user.toString()) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch (exception) {
-    next(exception);
+    response.status(400).send(exception.message);
   }
 });
 
