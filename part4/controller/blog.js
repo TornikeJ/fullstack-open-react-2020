@@ -3,6 +3,15 @@ const app = express();
 app.use(express.json());
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 app.get("/api/blogs", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -12,9 +21,24 @@ app.get("/api/blogs", async (request, response) => {
 
 app.post("/api/blogs", async (request, response) => {
   const body = request.body;
-  console.log(body);
-  const user = await User.findById(body.userId);
-  console.log(user);
+
+  const token = getTokenFrom(request)
+  let decodedToken;
+  
+  try{
+     decodedToken = jwt.verify(token, process.env.SECRET);
+  }
+  catch(exception){
+    
+  }
+
+  if (!token || !decodedToken.id || decodedToken.id !== request.body.userId) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -28,7 +52,7 @@ app.post("/api/blogs", async (request, response) => {
     user.blogs = user.blogs.concat(savedNote._id);
     await user.save();
 
-    response.send(200).json(savedNote.toJSON());
+    response.status(200).json(savedNote.toJSON());
   } catch (exception) {
     response.status(400).send(exception.message);
   }
