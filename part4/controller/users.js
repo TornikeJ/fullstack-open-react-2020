@@ -3,10 +3,10 @@ const express=require('express');
 const usersRouter = express();
 const User = require('../models/user')
 
-usersRouter.get('/api/users', async(reques,response) =>{
-    const users= await User.find({});
+usersRouter.get('/api/users', async(request,response) =>{
+    const users= await User.find({}).populate('blogs');
     console.log(users);
-    response.send(200).json(users);
+    response.json(users);
 })
 
 usersRouter.post('/api/users', async (request, response) => {
