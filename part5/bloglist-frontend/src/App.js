@@ -97,6 +97,11 @@ const App = () => {
     </form>
   );
 
+  const handleLogOut = () => {
+    setUser(null);
+    window.localStorage.removeItem('loggedNoteappUser')
+  }
+
   const blogForm = () => (
     <form onSubmit={addBlog}>
       <input value={newBlog} onChange={handleBlogChange} />
@@ -114,7 +119,7 @@ const App = () => {
       {user === null ?
       loginForm() :
       <div>
-        <p>{user.name} logged in</p>
+        <span>{user.name} logged in</span> <button onClick={handleLogOut}>logout</button>
         {/* {blogForm()} */}
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
