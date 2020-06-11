@@ -97,6 +97,13 @@ const App = () => {
     window.localStorage.removeItem("loggedNoteappUser");
   };
 
+  const removeBlog = (blog) => {
+    if(window.confirm(`Are you sure you want to remove ${blog.title} by ${blog.author}?`)){
+      blogService.remove(blog.id)
+      setBlogs(blogs.filter(blogDb=>blogDb.id !== blog.id))
+    }
+  }
+
   const blogForm = () => (
     <BlogForm 
       newTitle={newTitle}
@@ -130,7 +137,7 @@ const App = () => {
             {blogForm()}
           </Togglable>
           {blogs.sort((a,b)=> b.likes - a.likes).map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleDelete={removeBlog}/>
           ))}
         </div>
       )}
