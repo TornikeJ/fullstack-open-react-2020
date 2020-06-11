@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
+import blogService from "../services/blogs";
  
 const Blog = ({ blog }) => {
   const [showList, setShowList]=useState(false);
+  const [likes, setLikes]=useState(blog.likes);
 
   const blogStyle = {
     paddingTop: 10,
@@ -9,6 +11,12 @@ const Blog = ({ blog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const handleLike = () => {
+    blog.likes+=1;
+    setLikes(blog.likes);
+    blogService.update(blog.id,blog)
   }
 
   return(
@@ -24,7 +32,7 @@ const Blog = ({ blog }) => {
         {blog.url}  
       </p>      
       <p>
-        {blog.likes} <button >Like</button>
+        {likes} <button onClick={handleLike} >Like</button>
       </p>      
     </div>:null
     }
