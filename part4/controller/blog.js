@@ -25,7 +25,7 @@ app.post("/api/blogs", async (request, response) => {
     
   }
 
-  if (!decodedToken || !decodedToken.id || decodedToken.id !== request.body.userId) {
+  if (!decodedToken || !decodedToken.id ) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
 
@@ -52,12 +52,10 @@ app.post("/api/blogs", async (request, response) => {
 });
 
 app.delete("/api/blogs/:id", async (request, response) => {
-
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET);
-    const blog=await Blog.findById(request.params.id);
 
-    if (!decodedToken || !decodedToken.id || decodedToken.id !== blog.user.toString()) {
+    if (!decodedToken || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     await Blog.findByIdAndRemove(request.params.id);
@@ -69,8 +67,14 @@ app.delete("/api/blogs/:id", async (request, response) => {
 
 app.put("/api/blogs/:id", async (request, response, next) => {
   try {
-    console.log(request.body);
-    await Blog.findByIdAndUpdate(request.params.id, request.body);
+    const blog={
+      likes: request.body.likes,
+      title: request.body.title,
+      author: request.body.author,
+      url: request.body.url,
+      id:request.body.id
+    }
+    await Blog.findByIdAndUpdate(request.params.id, blog);
     response.status(200).end();
   } catch (exception) {
     next(exception);
