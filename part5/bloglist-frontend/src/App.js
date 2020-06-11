@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import LoginForm from "./components/Login";
+import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -96,34 +97,15 @@ const App = () => {
   };
 
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <h1>create new</h1>
-      <div>
-        Title
-        <input
-          name="title"
-          value={newTitle}
-          onChange={({ target }) => setNewTitle(target.value)}
-        />
-      </div>
-      <div>
-        Author
-        <input
-          name="author"
-          value={newAuthor}
-          onChange={({ target }) => setNewAuthor(target.value)}
-        />
-      </div>
-      <div>
-        Url
-        <input
-          name="url"
-          value={newUrl}
-          onChange={({ target }) => setNewUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <BlogForm 
+      newTitle={newTitle}
+      newAuthor={newAuthor}
+      newUrl={newUrl}
+      handleAddBlog={addBlog}
+      handleSetNewTitle={({ target }) => setNewTitle(target.value)}
+      handleSetNewAuthor={({ target }) => setNewAuthor(target.value)}
+      handleSetNewUrl={({ target }) => setNewUrl(target.value)}
+    />
   );
 
   return (
