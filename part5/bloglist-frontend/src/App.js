@@ -5,7 +5,9 @@ import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState("");
+  const [newTitle, setNewTitle] = useState("");
+  const [newAuthor, setNewAuthor] = useState("");
+  const [newUrl, setNewUrl] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
@@ -16,30 +18,27 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
-  
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
     }
-  }, [])
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      console.log(username,password)
+      console.log(username, password);
       const user = await loginService.login({
         username,
         password,
       });
 
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
 
-      blogService.setToken(user.token)
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -51,27 +50,27 @@ const App = () => {
     }
   };
 
-
   const addBlog = (event) => {
-    // event.preventDefault()
-    // const blogObject = {
-    //   content: newNote,
-    //   date: new Date().toISOString(),
-    //   important: Math.random() > 0.5,
-    //   id: notes.length + 1,
-    // }
-  
-    // blogService
-    //   .create(blogObject)
-    //   .then(returnedNote => {
-    //     setBlogs(notes.concat(returnedNote))
-    //     setNewBlog('')
-    //   })
-  }
+    event.preventDefault()
+    const blogObject = {
+        "title": newTitle,
+        "author": newAuthor,
+        "likes": 0,
+        "url":newUrl
+      }
 
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
-  }
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setNewUrl('')
+        setNewTitle('')
+        setNewAuthor('')
+      })
+  };
+
+  // const handleBlogChange = (event) =>     setNewBlog(event.target.value)
+  // }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -99,16 +98,39 @@ const App = () => {
 
   const handleLogOut = () => {
     setUser(null);
-    window.localStorage.removeItem('loggedNoteappUser')
-  }
+    window.localStorage.removeItem("loggedNoteappUser");
+  };
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <input value={newBlog} onChange={handleBlogChange} />
-      <button type="submit">save</button>
+    <h1>create new</h1>
+      <div>
+        Title
+        <input
+          name="title"
+          value={newTitle}
+          onChange={({ target }) => setNewTitle(target.value)}
+        />
+      </div>
+      <div>
+        Author
+        <input
+          name="author"
+          value={newAuthor}
+          onChange={({ target }) => setNewAuthor(target.value)}
+        />
+      </div>
+      <div>
+        Url
+        <input
+          name="url"
+          value={newUrl}
+          onChange={({ target }) => setNewUrl(target.value)}
+        />
+      </div>
+      <button type="submit">create</button>
     </form>
   );
-
 
   return (
     <div>
@@ -116,16 +138,20 @@ const App = () => {
 
       {/* <Notification message={errorMessage} /> */}
 
-      {user === null ?
-      loginForm() :
-      <div>
-        <span>{user.name} logged in</span> <button onClick={handleLogOut}>logout</button>
-        {/* {blogForm()} */}
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
-    }
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          <div>
+            <span>{user.name} logged in</span>{" "}
+            <button onClick={handleLogOut}>logout</button>
+          </div>
+          {blogForm()}
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
+      )}
       {/* <Footer /> */}
     </div>
   );
