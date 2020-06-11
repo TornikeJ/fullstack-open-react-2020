@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -8,8 +9,8 @@ const App = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
-  const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -63,14 +64,16 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
+        setSuccessMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+        setTimeout(()=>{
+          setSuccessMessage(null)
+        },5000)
         setNewUrl('')
         setNewTitle('')
         setNewAuthor('')
       })
   };
 
-  // const handleBlogChange = (event) =>     setNewBlog(event.target.value)
-  // }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -136,7 +139,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
 
-      {/* <Notification message={errorMessage} /> */}
+      <Notification errorMessage={errorMessage} successMessage={successMessage} />
 
       {user === null ? (
         loginForm()
@@ -152,7 +155,6 @@ const App = () => {
           ))}
         </div>
       )}
-      {/* <Footer /> */}
     </div>
   );
 };
