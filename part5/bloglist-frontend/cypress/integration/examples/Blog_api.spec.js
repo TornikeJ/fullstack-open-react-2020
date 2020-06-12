@@ -37,6 +37,8 @@ describe('Blog app', function() {
         cy.get('#author').type('Anonymous')
         cy.get('#url').type('angular.com')
         cy.get('#createBlog').click()
+        cy.contains('show').click()
+        cy.contains('Like').click()
       })
     })
   })
