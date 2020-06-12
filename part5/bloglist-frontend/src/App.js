@@ -102,8 +102,15 @@ const App = () => {
         `Are you sure you want to remove ${blog.title} by ${blog.author}?`
       )
     ) {
-      blogService.remove(blog.id)
-      setBlogs(blogs.filter((blogDb) => blogDb.id !== blog.id))
+      blogService.remove(blog.id).then(
+        setBlogs(blogs.filter((blogDb) => blogDb.id !== blog.id))
+      ).catch(err=> {
+        setBlogs(blogs)
+        setErrorMessage("This blog wasn't created by logged user and can't delete it")
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      } )
     }
   }
 
