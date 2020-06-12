@@ -13,17 +13,17 @@ const BlogForm = ({
     <h1>create new</h1>
     <div>
       Title
-      <input name="title" value={newTitle} onChange={handleSetNewTitle} />
+      <input id="title" name="title" value={newTitle} onChange={handleSetNewTitle} />
     </div>
     <div>
       Author
-      <input name="author" value={newAuthor} onChange={handleSetNewAuthor} />
+      <input id="author" name="author" value={newAuthor} onChange={handleSetNewAuthor} />
     </div>
     <div>
       Url
-      <input name="url" value={newUrl} onChange={handleSetNewUrl} />
+      <input id="url" name="url" value={newUrl} onChange={handleSetNewUrl} />
     </div>
-    <button type="submit">create</button>
+    <button id="createBlog" type="submit">create</button>
   </form>
 )
 
