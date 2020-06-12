@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 test('renders content', () => {
@@ -25,6 +25,16 @@ test('renders content', () => {
   )
   expect(component.container).toHaveTextContent(
     'test6 test'
+  )
+
+  const button = component.getByText('show')
+  fireEvent.click(button)
+
+  expect(component.container).toHaveTextContent(
+    'urltest'
+  )
+  expect(component.container).toHaveTextContent(
+    5
   )
 
 })
