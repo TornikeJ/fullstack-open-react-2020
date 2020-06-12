@@ -29,12 +29,20 @@ test('renders content', () => {
 
   const button = component.getByText('show')
   fireEvent.click(button)
-
+  
   expect(component.container).toHaveTextContent(
     'urltest'
-  )
-  expect(component.container).toHaveTextContent(
-    5
-  )
+    )
+    expect(component.container).toHaveTextContent(
+      5
+    )
+    
+    fireEvent.click(button)
 
-})
+    expect(component.container).not.toHaveTextContent(
+      'urltest'
+    )
+      expect(component.container).not.toHaveTextContent(
+        5
+    )
+  })
