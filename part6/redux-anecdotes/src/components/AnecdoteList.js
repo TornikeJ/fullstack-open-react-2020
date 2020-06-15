@@ -8,17 +8,13 @@ import { voteNotification, resetNotification } from "../reducers/notificationRed
 const AnecdoteList = () => {
     const anecdotes = useSelector((state) => state.anecdotes);
     const filter = useSelector(state => state.filter)
-
     const dispatch = useDispatch();
 
     
-  const handleVote = (anecdote) => {
+const handleVote = (anecdote) => {
     console.log("vote", anecdote.id);
-    dispatch(riseVote(anecdote.id));
-    dispatch(voteNotification(anecdote.content))
-    setTimeout(()=>{
-    dispatch(resetNotification())
-    },5000)
+    dispatch(riseVote(anecdote));
+    dispatch(voteNotification(anecdote.content,10))
   };
 
     return (

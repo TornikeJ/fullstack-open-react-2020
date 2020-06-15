@@ -1,16 +1,32 @@
 const initialState=''
 
-export const voteNotification = (anecdote) =>{
-    return{
-        type:'VOTE',
-        message:`you voted '${anecdote}'`
+export const voteNotification = (anecdote,seconds) =>{
+    return async dispatch => {
+        dispatch({
+            type:'VOTE',
+            message:`you voted '${anecdote}'`
+        })
+
+        const time=seconds*1000;
+
+        setTimeout(()=>{
+            dispatch(resetNotification())
+        },time)
     }
 }
 
-export const addNotification = (anecdote) =>{
-    return{
-        type:'ADD',
-        message:`you added '${anecdote}'`
+export const addNotification = (anecdote,seconds) =>{
+    return async dispatch =>{
+        dispatch({
+            type:'ADD',
+            message:`you added '${anecdote}'`
+        })
+
+        const time=seconds*1000;
+        
+        setTimeout(()=>{
+            dispatch(resetNotification())
+        },time)
     }
 }
 
