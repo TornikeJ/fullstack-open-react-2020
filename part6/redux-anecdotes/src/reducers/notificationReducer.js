@@ -1,7 +1,11 @@
 const initialState=''
+let timeOut;
 
 export const voteNotification = (anecdote,seconds) =>{
     return async dispatch => {
+        
+        clearTimeout(timeOut);
+
         dispatch({
             type:'VOTE',
             message:`you voted '${anecdote}'`
@@ -9,14 +13,17 @@ export const voteNotification = (anecdote,seconds) =>{
 
         const time=seconds*1000;
 
-        setTimeout(()=>{
+        timeOut= setTimeout(()=>{
             dispatch(resetNotification())
         },time)
+        
     }
 }
 
 export const addNotification = (anecdote,seconds) =>{
     return async dispatch =>{
+        clearTimeout(timeOut)
+
         dispatch({
             type:'ADD',
             message:`you added '${anecdote}'`
@@ -24,7 +31,7 @@ export const addNotification = (anecdote,seconds) =>{
 
         const time=seconds*1000;
         
-        setTimeout(()=>{
+        timeOut= setTimeout(()=>{
             dispatch(resetNotification())
         },time)
     }
