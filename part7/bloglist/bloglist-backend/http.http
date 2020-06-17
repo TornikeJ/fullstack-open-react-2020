@@ -1,0 +1,36 @@
+
+# POST  http://localhost:3003/api/users
+# Content-Type: application/json
+
+# {
+#     "username": "test6",
+#     "name": "test",
+#     "password": "te"
+# }
+
+# POST  http://localhost:3003/api/blogs
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3Q1IiwiaWQiOiI1ZWUxMDg3YTI3NWQwMzFmYTA0Njk5NDgiLCJpYXQiOjE1OTE4MTMxMjV9.0narpgnvuHuNF_Onye5c9JrDiFn1desQWfgctYWAeFs
+
+# {
+#     "title": "test6",
+#     "author": "test",
+#     "likes": 5,
+#     "url":"test",
+#     "userId":"5ee1087a275d031fa0469948"
+# }
+
+
+# DELETE  http://localhost:3003/api/blogs/5ee1255af7d8171bf01c85a3
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3Q1IiwiaWQiOiI1ZWUxMDg3YTI3NWQwMzFmYTA0Njk5NDgiLCJpYXQiOjE1OTE4MTMxMjV9.0narpgnvuHuNF_Onye5c9JrDiFn1desQWfgctYWAeFs
+
+
+
+POST  http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username":"test5",
+    "password":"test"
+}
