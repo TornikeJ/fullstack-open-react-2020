@@ -1,0 +1,46 @@
+{
+  "notes": [
+    {
+      "content": "custom-hookit aivan mahtavia",
+      "id": 1
+    },
+    {
+      "content": "paras feature ikinä <3",
+      "id": 2
+    },
+    {
+      "content": "test test lalalala test",
+      "id": 3
+    },
+    {
+      "content": "lalala test lalala",
+      "id": 4
+    },
+    {
+      "content": "this must work",
+      "id": 5
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "tornike",
+      "number": "111-244251",
+      "id": 2
+    },
+    {
+      "name": "test",
+      "number": "125=21515",
+      "id": 3
+    },
+    {
+      "name": "this must work also",
+      "number": "555-333",
+      "id": 4
+    }
+  ]
+}
