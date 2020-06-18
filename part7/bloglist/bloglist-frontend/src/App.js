@@ -36,24 +36,20 @@ const App = () => {
   const [users, setUsers]=useState([]);
 
   useEffect(() => {
-    // blogService.getAll().then((blogs) => setBlogs(blogs))
     blogService.getAll().then((blogs) => dispatch(initBlogs(blogs)))
   }, [])
 
   
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      console.log(user)
-     
+      const user = JSON.parse(loggedUserJSON)  
       dispatch(storeUserAction(user))
       blogService.setToken(user.token)
     }
   }, [])
   
   useEffect(() => {
-    console.log(user,'lala')
     userService.getAll().then((users) => setUsers(users))
   }, [])
 
@@ -65,7 +61,7 @@ const App = () => {
         password,
       })
 
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
 
       blogService.setToken(user.token)
       dispatch(storeUserAction(user))
@@ -100,7 +96,7 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <>
+      <div className="container min-vh-100">
       <Notification/>
       <LoginForm
         username={username}
@@ -109,13 +105,13 @@ const App = () => {
         handlePasswordChange={({ target }) => setPassword(target.value)}
         handleSubmit={handleLogin}
       />
-      </>
+      </div>
     )
   }
 
   const handleLogOut = () => {
     dispatch(storeUserAction(null))
-    window.localStorage.removeItem('loggedNoteappUser')
+    window.localStorage.removeItem('loggedBlogappUser')
   }
 
   const removeBlog = (blog) => {
@@ -154,12 +150,14 @@ const App = () => {
         ) : (
           <div>
             <Router>
-            <div style={{display:'flex', background:'lightgray', padding:'0.5rem 0'}}>
-              <Navigation />
-              <span>{user.name} logged in</span>{' '}
-              <button onClick={handleLogOut}>logout</button>
+            <div className="navbar navbar-expand-lg navbar-light" style={{background:'#e3f2fd'}}>
+              <div className="container">
+                <Navigation/>
+                <span className="mr-3">{user.name} logged in</span>{' '}
+                <button className="btn btn-danger" onClick={handleLogOut}>Log out</button>
+              </div>
             </div>
-              <h2>Blogs</h2>
+            <div className="container">
               <Notification/>
               <Switch>
                 <Route path="/users/:id">
@@ -172,17 +170,20 @@ const App = () => {
                     <BlogDetails blogs={blogs} handleDelete={removeBlog} />
                 </Route>
                 <Route path="/">
-                  <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                  <h2>Blogs</h2>
+                  <Togglable buttonLabel="New Blog"  ref={blogFormRef}>
                     {blogForm()}
                   </Togglable>
+                  <ul className="list-group">
                   {blogs
                     .sort((a, b) => b.likes - a.likes)
                     .map((blog) => (
-                      <Blog key={blog.id} blog={blog} 
-                      />
-                    ))}
+                      <li className="list-group-item" key={blog.id}><Blog blog={blog}/></li>
+                      ))}
+                  </ul>
                 </Route> 
               </Switch>
+              </div>
             </Router>
         </div>
       )}

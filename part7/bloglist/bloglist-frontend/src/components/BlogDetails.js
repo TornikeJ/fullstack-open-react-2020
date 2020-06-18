@@ -36,23 +36,23 @@ const BlogDetails = ({ handleDelete, blogs }) => {
             blog ?
             <div>
                 <p>
-                {blog.url}
+                Url: <a href={blog.url}>{blog.url}</a>
                 </p>
-                <span className="like">
+                <span className="like mr-2 lead">
                 {blog.likes}
                 </span>
-                <button onClick={handleLike} >Like</button>
+                <button className="btn btn-success" onClick={handleLike} >Like</button>
                 <div>
                 <p>added by {blog.user.username}</p>
-                <button onClick={() => handleDelete(blog)}>Remove</button>
+                <button className="btn btn-danger" onClick={() => handleDelete(blog)}>Remove</button>
                 </div>
                 <h3>comments</h3>
-                <div>
-                    <input value={comment} onChange={(event)=>{setComment(event.target.value)}}/>
-                    <button type="button" onClick={addComment}>Add comment</button>
+                <div className="form-inline mb-3">
+                    <input className="form-control mr-2" value={comment} onChange={(event)=>{setComment(event.target.value)}}/>
+                    <button type="button" className="btn btn-primary" onClick={addComment}>Add comment</button>
                 </div>
-                <ul>
-                    {blog.comments?.map((comment,i)=><li key={i}>{comment}</li>)}
+                <ul className="list-group">
+                    {blog.comments?.map((comment,i)=><li className="list-group-item"  key={i}>{comment}</li>)}
                 </ul>
             </div>:null
         }

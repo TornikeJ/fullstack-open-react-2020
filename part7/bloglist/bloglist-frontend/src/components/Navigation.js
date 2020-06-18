@@ -6,9 +6,9 @@ const Navigation = () => {
       paddingRight: 5
     }
     return (
-      <div>
-        <Link to='/' style={padding}>blogs</Link>
-        <Link to='/users' style={padding}>users</Link>
+      <div className="mr-auto" >
+        <Link to='/' style={padding}>Blogs</Link>
+        <Link to='/users' style={padding}>Users</Link>
       </div>
     )
   }

@@ -8,7 +8,7 @@ const Users = ({users}) => {
   return (
     <>
     <h2>Users</h2>
-    <table>
+    <table className="table">
       <thead>
         <tr>
           <td></td>

@@ -10,9 +10,9 @@ const User = ({users}) => {
     return (
         <>
         <h1>{user?.username}</h1>
-        <h3>added blogs</h3>
-        <ul>
-            {user?.blogs.map((blog,i) =><li key={i}>{blog.title}</li>
+        <h5>Added Blogs</h5>
+        <ul className="list-group">
+            {user?.blogs.map((blog,i) =><li className="list-group-item" key={i}>{blog.title}</li>
             )}
         </ul>
         </>
