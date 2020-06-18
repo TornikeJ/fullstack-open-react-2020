@@ -90,6 +90,7 @@ const Authors = (props) => {
         </select>  
       </div>
       <div style={row}>
+        p
         <span style={col1}>born</span>
         <input style={col2} type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
       </div>
