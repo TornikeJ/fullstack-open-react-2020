@@ -1,5 +1,5 @@
-import React from 'react'
-import { gql, useQuery } from '@apollo/client';
+import React, {useState} from 'react'
+import { gql, useQuery, useMutation } from '@apollo/client';
 
 const ALL_AUTHORS = gql`
 query{
@@ -11,8 +11,22 @@ query{
 }
 `
 
+const UPDATE_AUTHOR = gql`
+  mutation updateAuthor($name: String!, $setBornTo: Int!) {
+     editAuthor(name: $name, setBornTo: $setBornTo) {
+       name
+       born
+     }
+  }
+`
+
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
+  const [name, setName] = useState('')
+  const [setBornTo, setYear] = useState('')
+  const [ updateAuthor ] = useMutation(UPDATE_AUTHOR, {
+    refetchQueries: [ { query: ALL_AUTHORS} ]
+  })
 
   if (result.loading)  {
     return <div>loading...</div>
@@ -24,6 +38,13 @@ const Authors = (props) => {
   }
   const authors = result.data.allAuthors;
 
+  const updateYear = async () =>{
+    
+    updateAuthor({  variables: { name, setBornTo } }).catch(err=>console.log(err))
+
+    setName('')
+    setYear('')
+  }
 
   return (
     <div>
@@ -48,6 +69,16 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+      <h3>set birthyear</h3>
+      <div>
+        name
+        <input value={name} onChange={(event)=>{setName(event.target.value)}}/>
+      </div>
+      <div>
+        born
+        <input type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
+      </div>
+      <button onClick={updateYear} type="button">update author</button>
     </div>
   )
 }
