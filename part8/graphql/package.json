@@ -9,6 +9,7 @@
   "author": "TornikeJ",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.0.0-rc.6",
     "apollo-server": "^2.15.0",
     "graphql": "^15.1.0",
     "uuid": "^8.1.0"
