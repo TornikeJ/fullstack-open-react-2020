@@ -87,10 +87,9 @@ const Authors = (props) => {
         <select style={col2} value={name} onChange={(event)=>{setName(event.target.value)}}>
             <option></option>
             {authors.map((a,i) => <option key={i} value={a.name}>{a.name}</option> )}
-        </select>  
+        </select>
       </div>
       <div style={row}>
-        p
         <span style={col1}>born</span>
         <input style={col2} type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
       </div>
