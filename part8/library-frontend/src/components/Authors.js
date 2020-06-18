@@ -1,6 +1,17 @@
 import React, {useState} from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client';
 
+const row={
+  display:'flex'
+}
+
+const col1={
+  width: '33%'
+}
+const col2={
+  width: '67%'
+}
+
 const ALL_AUTHORS = gql`
 query{
   allAuthors {
@@ -69,16 +80,21 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+      <div style={{display:'inline-block'}}>
       <h3>set birthyear</h3>
-      <div>
-        name
-        <input value={name} onChange={(event)=>{setName(event.target.value)}}/>
+      <div style={row}>
+        <span style={col1}>author</span>
+        <select style={col2} value={name} onChange={(event)=>{setName(event.target.value)}}>
+            <option></option>
+            {authors.map((a,i) => <option key={i} value={a.name}>{a.name}</option> )}
+        </select>  
       </div>
-      <div>
-        born
-        <input type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
+      <div style={row}>
+        <span style={col1}>born</span>
+        <input style={col2} type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
       </div>
       <button onClick={updateYear} type="button">update author</button>
+      </div>
     </div>
   )
 }
