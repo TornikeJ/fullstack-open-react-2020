@@ -1,7 +1,7 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client';
 
-const ALL_PERSONS = gql`
+const ALL_AUTHORS = gql`
 query{
   allAuthors {
    name
@@ -12,7 +12,7 @@ query{
 `
 
 const Authors = (props) => {
-  const result = useQuery(ALL_PERSONS)
+  const result = useQuery(ALL_AUTHORS)
 
   if (result.loading)  {
     return <div>loading...</div>
