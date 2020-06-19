@@ -23,10 +23,11 @@ query{
 `
 
 const UPDATE_AUTHOR = gql`
-  mutation updateAuthor($name: String!, $setBornTo: Int!) {
-     editAuthor(name: $name, setBornTo: $setBornTo) {
-       name
-       born
+  mutation updateAuthor($name: String!, $born: Int!) {
+     editAuthor(name: $name, born: $born) {
+       name,
+       born,
+       bookCount
      }
   }
 `
@@ -34,9 +35,20 @@ const UPDATE_AUTHOR = gql`
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
   const [name, setName] = useState('')
-  const [setBornTo, setYear] = useState('')
+  const [born, setYear] = useState('')
   const [ updateAuthor ] = useMutation(UPDATE_AUTHOR, {
-    refetchQueries: [ { query: ALL_AUTHORS} ]
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_AUTHORS })
+      const updatedAuthors = dataInStore.allAuthors
+      .map(author=> author.name===response.data.editAuthor.name? response.data.editAuthor:author)
+      store.writeQuery({
+        query: ALL_AUTHORS,
+        data: {
+          ...dataInStore,
+          allAuthors: [ ...updatedAuthors ]
+        }
+      })
+    }
   })
 
   if (result.loading)  {
@@ -51,7 +63,7 @@ const Authors = (props) => {
 
   const updateYear = async () =>{
     
-    updateAuthor({  variables: { name, setBornTo } }).catch(err=>console.log(err))
+    updateAuthor({  variables: { name, born } }).catch(err=>console.log(err))
 
     setName('')
     setYear('')
@@ -91,7 +103,7 @@ const Authors = (props) => {
       </div>
       <div style={row}>
         <span style={col1}>born</span>
-        <input style={col2} type="number" value={setBornTo} onChange={(event)=>{setYear(+event.target.value)}}/>
+        <input style={col2} type="number" value={born} onChange={(event)=>{setYear(+event.target.value)}}/>
       </div>
       <button onClick={updateYear} type="button">update author</button>
       </div>

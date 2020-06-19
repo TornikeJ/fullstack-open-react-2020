@@ -143,7 +143,7 @@ const typeDefs = gql`
       published: Int!
       genres: [String!]!
     ): Book
-    editAuthor(name: String!, setBornTo: Int!): Author
+    editAuthor(name: String!, born: Int!): Author
     createUser(
       username: String!
       favoriteGenre: String!
@@ -233,7 +233,8 @@ const resolvers = {
       } else{
         const newAuthor=new Author({
           name:args.author,
-          born:null
+          born:null,
+          bookCount:1
         })
         try{
           const response=await newAuthor.save();
@@ -265,14 +266,16 @@ const resolvers = {
       }
 
       try{
-        await Author.findByIdAndUpdate(author[0]._id,{born : args.setBornTo})
+          await Author.findByIdAndUpdate(author[0]._id,{born : args.born})
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
       })
     }
 
-      return author;
+      const updatedAuthor = await Author.find({name : args.name});
+ 
+      return updatedAuthor[0];
     },
     createUser: (root, args) => {
       const user = new User({ username: args.username, favoriteGenre:args.favoriteGenre })

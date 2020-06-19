@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { gql, useQuery } from '@apollo/client';
 
 const ALL_BOOKS = gql`
@@ -11,27 +11,53 @@ query{
         born
         bookCount
        },
-      published
+      published,
+      genres
   }
 }
 `
+
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
-
+  const [books, setBooks] = useState(null)
+  
+  useEffect(()=>{
+    if(result.data){
+      setBooks(result.data.allBooks)
+    }
+  },[result.data])
+  
   if (result.loading)  {
     return <div>loading...</div>
   }
-
+  
   if (!props.show) {
     return null
   }
 
-  const books = result.data.allBooks
+  const allBooks=result.data.allBooks
+  const favoriteGenre= result.data.me
+  const filters = []
+
+
+  allBooks
+    .forEach((a,i) => a.genres.forEach((genre,index,array)=> {
+      filters.push(genre)
+    }))
+  
+  const filterGenre = (event) => {
+    const genre=event.target.value
+    if(genre === 'all'){
+      setBooks(result.data.allBooks)
+    } else{
+      setBooks(result.data.allBooks.filter(book => book.genres.indexOf(genre)!==-1))
+    }
+  }
+
 
   return (
     <div>
       <h2>books</h2>
-
       <table>
         <tbody>
           <tr>
@@ -52,6 +78,15 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
+      <>
+      {filters
+      .map((genre,index)=> {
+        if(filters.indexOf(genre)===index){
+          return <button type="button" onClick={filterGenre} key={index} value={genre}>{genre}</button>
+        }
+      })}
+      <button onClick={filterGenre} value={'all'}>all genres</button>
+      </>
     </div>
   )
 }

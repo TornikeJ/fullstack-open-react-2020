@@ -12,12 +12,6 @@ mutation createBook($title: String!, $author: String!, $published: Int!, $genres
  ) {
    title,
    published,
-   author{
-    name
-    id
-    born
-    bookCount
-   },
    genres
  }
 }
@@ -55,7 +49,18 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
   const [ createBook ] = useMutation(CREATE_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ]
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_BOOKS })
+      console.log(dataInStore.allBooks)
+      console.log(response.data.addBook)
+      store.writeQuery({
+        query: ALL_BOOKS,
+        data: {
+          ...dataInStore,
+          allBooks: [ ...dataInStore.allBooks, response.data.addBook ]
+        }
+      })
+    }
   })
 
   if (!props.show) {
@@ -64,7 +69,7 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    
+    console.log(title,author,published,genres)
     console.log('add book...')
     createBook({  variables: { title, author, published, genres } }).catch(err=>console.log(err))
 
@@ -89,7 +94,6 @@ const NewBook = (props) => {
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
-            required
           />
         </div>
         <div>
@@ -97,7 +101,6 @@ const NewBook = (props) => {
           <input
             value={author}
             onChange={({ target }) => setAuhtor(target.value)}
-            required
           />
         </div>
         <div>
@@ -106,7 +109,6 @@ const NewBook = (props) => {
             type='number'
             value={published}
             onChange={({ target }) => setPublished(+target.value)}
-            required
           />
         </div>
         <div>

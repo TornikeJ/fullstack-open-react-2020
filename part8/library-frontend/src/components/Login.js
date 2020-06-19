@@ -8,9 +8,11 @@ mutation login($username: String!, $password: String!) {
   }
 }
 `
-const LoginForm = ({ setError, setToken }) => {
+const LoginForm = ({ setError, setToken, show }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
@@ -34,6 +36,12 @@ const LoginForm = ({ setError, setToken }) => {
       localStorage.setItem('books-user-token', JSON.stringify({token}))
     }
   }, [result.data]) // eslint-disable-line
+
+
+  if (!show) {
+    return null
+  }
+
 
   const submit = async (event) => {
     event.preventDefault()
