@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { ApolloServer,  UserInputError, gql } = require("apollo-server");
+const { ApolloServer,  UserInputError, AuthenticationError, gql } = require("apollo-server");
 const { v1: uuid } = require("uuid");
 const mongoose = require("mongoose");
 const Book = require("./models/books");
@@ -173,17 +173,23 @@ const resolvers = {
       } else if (args.author) {
         return books.filter((book) => book.author === args.author);
       } else {
-        return await Book.find({});
+        const books=await Book.find({}).populate('author');
+        console.log(books)
+        return books
       }
     },
     allAuthors:  async () => {
       const authors=await Author.find({})
       const books = await Book.find({})
 
-      return authors.map((author) => {
+      return authors.map(async (author) => {
         const name = author.name
         const born = author.born
         const bookCount= books.filter((book) => book.author.toString() === author._id.toString());
+        if(author.bookCount !== bookCount.length){
+          await Author.findByIdAndUpdate(author._id,{bookCount: bookCount.length})
+        }
+
          return {
           name,
           born,
