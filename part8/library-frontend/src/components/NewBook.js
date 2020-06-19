@@ -27,7 +27,12 @@ const ALL_BOOKS = gql`
 query{
   allBooks{
       title
-      author
+      author{
+        name
+        id
+        born
+        bookCount
+       },
       published
   }
 }
@@ -84,6 +89,7 @@ const NewBook = (props) => {
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
+            required
           />
         </div>
         <div>
@@ -91,6 +97,7 @@ const NewBook = (props) => {
           <input
             value={author}
             onChange={({ target }) => setAuhtor(target.value)}
+            required
           />
         </div>
         <div>
@@ -99,6 +106,7 @@ const NewBook = (props) => {
             type='number'
             value={published}
             onChange={({ target }) => setPublished(+target.value)}
+            required
           />
         </div>
         <div>
