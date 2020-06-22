@@ -38,7 +38,6 @@ const Books = (props) => {
     
     const favoriteGenre= resultMe.data.me.favoriteGenre
     const books=result.data.allBooks.filter(book => book.genres.indexOf(favoriteGenre)!==-1)
-    console.log(result.data, resultMe.data)
 
  
   return (

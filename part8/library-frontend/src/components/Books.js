@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 const ALL_BOOKS = gql`
-query{
-  allBooks{
+query($genre:String){
+  allBooks(genre:$genre){
       title
       author{
         name
@@ -19,6 +19,7 @@ query{
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
+  const [getFiltered,filteredResult] = useLazyQuery(ALL_BOOKS)
   const [books, setBooks] = useState(null)
   
   useEffect(()=>{
@@ -26,6 +27,12 @@ const Books = (props) => {
       setBooks(result.data.allBooks)
     }
   },[result.data])
+
+  useEffect(()=>{
+    if(filteredResult.data){
+      setBooks(filteredResult.data.allBooks)
+    }
+  },[filteredResult.data])
   
   if (result.loading)  {
     return <div>loading...</div>
@@ -36,7 +43,6 @@ const Books = (props) => {
   }
 
   const allBooks=result.data.allBooks
-  const favoriteGenre= result.data.me
   const filters = []
 
 
@@ -50,7 +56,8 @@ const Books = (props) => {
     if(genre === 'all'){
       setBooks(result.data.allBooks)
     } else{
-      setBooks(result.data.allBooks.filter(book => book.genres.indexOf(genre)!==-1))
+      getFiltered({variables: {genre}})
+      // setBooks(result.data.allBooks.filter(book => book.genres.indexOf(genre)!==-1))
     }
   }
 

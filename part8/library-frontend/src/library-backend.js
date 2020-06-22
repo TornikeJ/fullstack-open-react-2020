@@ -169,12 +169,13 @@ const resolvers = {
             book.genres.indexOf(args.genre) !== -1
         );
       } else if (args.genre) {
-        return books.filter((book) => book.genres.indexOf(args.genre) !== -1);
+        const books = await Book.find({genres:{$in:args.genre}}).populate('author')
+        // return books.filter((book) => book.genres.indexOf(args.genre) !== -1);
+        return books
       } else if (args.author) {
         return books.filter((book) => book.author === args.author);
       } else {
         const books=await Book.find({}).populate('author');
-        console.log(books)
         return books
       }
     },
