@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 const ALL_BOOKS = gql`
-query($genre:String){
+query($genre:[String]){
   allBooks(genre:$genre){
       title
       author{
@@ -12,7 +12,8 @@ query($genre:String){
         bookCount
        },
       published,
-      genres
+      genres,
+      id
   }
 }
 `
