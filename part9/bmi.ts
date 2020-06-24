@@ -18,35 +18,33 @@ const parseArguments = (args: Array<string>) : calculateBMIValues => {
     }
 }
 
-const calculateBMI= (height:number, weight: number) => {
+export const calculateBMI= (height:number, weight: number) : string => {
     const heightToM=height/100;
     const result=weight/(heightToM*heightToM)
 
-    console.log(result)
-
     if(result < 15){
-        console.log('Very severely underweight')
+        return 'Very severely underweight'
     } 
     else if(result >= 15 && result <16){
-        console.log('Severely underweight')
+        return 'Severely underweight'
     }
     else if(result >= 16 && result <18.5){
-        console.log('Underweight')
+        return 'Underweight'
     }
     else if(result >= 18.5 && result <25){
-        console.log('Normal (healthy weight)')
+        return 'Normal (healthy weight)'
     }
     else if(result >= 25 && result <30){
-        console.log('Overweight')
+        return 'Overweight'
     }
     else if(result >= 30 && result <35){
-        console.log('Obese Class I (Moderately obese)')
+        return 'Obese Class I (Moderately obese)'
     }
     else if(result >= 35 && result <40){
-        console.log('Obese Class II (Severely obese)')
+        return 'Obese Class II (Severely obese)'
     }
-    else if(result >= 40){
-        console.log('Obese Class III (Very severely obese)')
+    else{
+        return 'Obese Class III (Very severely obese)'
     }
 }
 
@@ -54,7 +52,7 @@ const calculateBMI= (height:number, weight: number) => {
 
 try {
     const { value1, value2 } = parseArguments(process.argv);
-    calculateBMI(value1, value2);
+    console.log(calculateBMI(value1, value2));
   } catch (e) {
     console.log('Error, something bad happened, message: ', e.message);
   }
