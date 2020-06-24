@@ -38,7 +38,7 @@ const parseArguments = (args: Array<string>) : calculateExerciseValues => {
     }
 };
 
-const calculateExercises = (hours : Array<number>, target : number) =>{
+export const calculateExercises = (hours : Array<number>, target : number) : result =>{
     let sum=0;
     let trainingDays=0;
 
@@ -66,12 +66,12 @@ const calculateExercises = (hours : Array<number>, target : number) =>{
         average
     };
 
-    console.log(result);
+    return result;
 };
 
 try {
     const { value1, value2 } = parseArguments(process.argv);
-    calculateExercises(value1, value2);
+    console.log(calculateExercises(value1, value2));
   } catch (e) {
     console.log('Error, something bad happened, message: ', e.message);
   }
