@@ -8,18 +8,46 @@ export interface result {
     average: number;
 }
 
-const calculateExercises = (hours : Array<number>, target : number) : result =>{
-    if(hours.length !== 7){
-        throw new Error('Not enough days provided')
-    }
 
+interface calculateExerciseValues {
+    value1: Array<number>;
+    value2: number;
+  }
+
+const parseArguments = (args: Array<string>) : calculateExerciseValues => {
+
+    let days : any = args.slice(2,args.length-1)
+    console.log(days)
+
+    days.forEach((day: any,index: string | number) => {
+        if(!isNaN(Number(day))){
+            days[index]=Number(day);
+        } else{
+            throw new Error('Provided values were not numbers!:'+day);
+        }
+    })
+
+    if (!isNaN(Number(args[args.length-1]))) {
+        return {
+          value1: days,
+          value2: Number(args[args.length-1])
+        }
+      } else {
+        throw new Error('Provided values were not numbers!');
+    }
+}
+
+const calculateExercises = (hours : Array<number>, target : number) =>{
     let sum=0;
     let trainingDays=0;
-    hours.forEach(hour => {
+
+    hours.forEach(hour=> {
         if(hour>0){
             trainingDays+=1
         }
-        sum+=hour
+        if(!isNaN(hour)){
+            sum+=hour
+        }
     });
 
     const average=sum/hours.length
@@ -37,8 +65,12 @@ const calculateExercises = (hours : Array<number>, target : number) : result =>{
         average
     }
 
-    return result
+    console.log(result)
 }
 
-
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1],3.5))
+try {
+    const { value1, value2 } = parseArguments(process.argv);
+    calculateExercises(value1, value2);
+  } catch (e) {
+    console.log('Error, something bad happened, message: ', e.message);
+  }
