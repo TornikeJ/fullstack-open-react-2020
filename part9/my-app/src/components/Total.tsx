@@ -1,7 +1,7 @@
 import React from 'react';
-import {CourseParts} from '../shared/courseParts'
+import {CoursePart} from '../shared/courseParts';
 
-const Total:React.FC<CourseParts> = ({courseParts}) =>{
+const Total:React.FC<{courseParts:CoursePart[]}> = ({courseParts}) =>{
     return(
     <p>
     Number of exercises{" "}

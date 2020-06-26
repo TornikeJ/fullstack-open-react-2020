@@ -1,16 +1,12 @@
 import React from 'react'
-import { CourseParts } from '../shared/courseParts';
+import { CoursePart } from '../shared/courseParts';
+import Parts from './Part'
 
-const Content: React.FC<CourseParts> = (props) => {
-        return (
-        <>
-        {
-            props.courseParts.map(course=>{
-                return <p>{course.name} {course.exerciseCount}</p>
+const Content: React.FC<{courseParts : CoursePart[]}> = ({courseParts}) => {
+        return (<>{ courseParts.map((coursePart,index)=>{
+                return <Parts key={index} coursePart={coursePart}></Parts>
             })
-        }
-        </>
-        )
+        }</>)
     }
 
 export default Content;
