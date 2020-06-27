@@ -12,6 +12,7 @@ const PatientPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [{ patient }, dispatch] = useStateValue();
     React.useEffect(() => {
+        console.log(patient[id])
         if(!patient[id]){
             axios.get<PatientsEntry>(`${apiBaseUrl}/patients/${id}`)
             .then(({data:PatientsEntry})=> dispatch(setPatient(PatientsEntry)))
@@ -41,6 +42,19 @@ const PatientPage: React.FC = () => {
         </Table.Row>
     </Table.Body>
     </Table>
+    <Container textAlign="left">
+        <h3>Entries</h3>
+        {patient[id]?.entries?.map((entry,index)=>{return(
+            <div key={index}>
+                <p>{entry.date} {entry.description}</p>
+                <ul>
+                    {entry.diagnosisCodes?.map((code,index)=>{return(
+                        <li key={index}>{code}</li>
+                    )})}
+                </ul>
+            </div>
+        )})}
+    </Container>
     </div>
     )}
 
