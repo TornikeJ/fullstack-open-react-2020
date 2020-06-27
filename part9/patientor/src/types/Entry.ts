@@ -37,6 +37,8 @@ interface OccupationalHealthcareEntry  extends BaseEntry {
     },
 }
 
+export type newEntry = Omit<Entry,'healthCheckRating'>
+
 export type Entry =
     | HospitalEntry
     | OccupationalHealthcareEntry

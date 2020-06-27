@@ -1,5 +1,6 @@
 import { NonSensitivePatientsEntry, PatientsEntry, NewPatientsEntry } from '../types/Patients';
 import patientsData from '../data/patients';
+import { Entry } from '../types/Entry';
 
 const uniqid = require('uniqid');
 
@@ -17,21 +18,32 @@ const getNonSensitiveEntries = (): NonSensitivePatientsEntry[] => {
   }));
 };
 
-const addEntry = (entry: NewPatientsEntry): PatientsEntry => {
+const addPatient = (entry: NewPatientsEntry): PatientsEntry => {
   const newPatientsEntry = {
     id: uniqid(),
     ...entry
-  }
+  };
 
   patientsData.push(newPatientsEntry);
 
-  return newPatientsEntry
+  return newPatientsEntry;
 };
+
+const addEntry = (patientId:string, entry: Entry): Entry => {
+  const patient = patientsData.find(d => d.id === patientId);
+  const newEntry:Entry = {
+    ...entry,
+    id: uniqid()
+  }
+  patient?.entries?.push(newEntry);
+  return newEntry;
+}
 
 const getPatient = (id: string): PatientsEntry | undefined => {
   const patient = patientsData.find(d => d.id === id);
   return patient;
 }
+
 
 // const findById = (id: string): PatientsEntry | undefined => {
 //   const entry = patientsData.find(d => d.id === id);
@@ -48,8 +60,9 @@ const getPatient = (id: string): PatientsEntry | undefined => {
 
 export default {
   getEntries,
-  addEntry,
+  addPatient,
   getNonSensitiveEntries,
   // findById,
-  getPatient
+  getPatient,
+  addEntry
 };
