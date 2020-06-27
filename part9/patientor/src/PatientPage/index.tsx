@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
-import { Container, Table} from "semantic-ui-react"; 
+import {  Container, Table, Card} from "semantic-ui-react"; 
 import { PatientsEntry } from '../types/Patients';
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, setPatient } from "../state";
-import { DiagnoseEntry } from '../types/Diagnose';
+// import { DiagnoseEntry } from '../types/Diagnose';
+import EntryDetails from "./entryDetials";
 
 
 
 const PatientPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [diagnose, setDiagnose]=useState<DiagnoseEntry[]>()
+    // const [diagnose, setDiagnose]=useState<DiagnoseEntry[]>()
     const [{ patient }, dispatch] = useStateValue();
     React.useEffect(() => {
         if(!patient[id]){
@@ -19,13 +20,13 @@ const PatientPage: React.FC = () => {
             .then(({data:PatientsEntry})=> dispatch(setPatient(PatientsEntry)))
             .catch(e=>console.error(e));
             
-            axios.get<DiagnoseEntry[]>(`${apiBaseUrl}/diagnoses/`)
-            .then(({data:DiagnoseEntry}) => {
-                if(DiagnoseEntry){
-                    setDiagnose(DiagnoseEntry)
-                }
-            })
-            .catch(e=>console.error(e));
+            // axios.get<DiagnoseEntry[]>(`${apiBaseUrl}/diagnoses/`)
+            // .then(({data:DiagnoseEntry}) => {
+            //     if(DiagnoseEntry){
+            //         setDiagnose(DiagnoseEntry)
+            //     }
+            // })
+            // .catch(e=>console.error(e));
         }
     },[patient[id]?.id]);
     return(
@@ -53,19 +54,21 @@ const PatientPage: React.FC = () => {
     </Table>
     <Container textAlign="left">
         <h3>Entries</h3>
+        <Card.Group style={{flexDirection:'column'}}>
         {patient[id]?.entries?.map((entry,index)=>{return(
             <div key={index}>
-                <p>{entry.date} {entry.description}</p>
-                <ul>
+                    <EntryDetails entry={entry}></EntryDetails>
+                {/* <ul>
                     {entry.diagnosisCodes?.map((code,index)=>{return(
                         <li key={index}>{code} {diagnose?.map((d,i)=> {
                             return d.code === code? <span key={i}>{d.name}</span> : null
                         })}
                         </li>
-                    )})}
-                </ul>
+                        )})}
+                    </ul> */}
             </div>
         )})}
+        </Card.Group>
     </Container>
     </div>
     )}
