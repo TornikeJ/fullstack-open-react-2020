@@ -1,21 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Container, Table} from "semantic-ui-react"; 
 import { PatientsEntry } from '../types/Patients';
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, setPatient } from "../state";
+import { DiagnoseEntry } from '../types/Diagnose';
 
 
 
 const PatientPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const [diagnose, setDiagnose]=useState<DiagnoseEntry[]>()
     const [{ patient }, dispatch] = useStateValue();
     React.useEffect(() => {
-        console.log(patient[id])
         if(!patient[id]){
             axios.get<PatientsEntry>(`${apiBaseUrl}/patients/${id}`)
             .then(({data:PatientsEntry})=> dispatch(setPatient(PatientsEntry)))
+            .catch(e=>console.error(e));
+            
+            axios.get<DiagnoseEntry[]>(`${apiBaseUrl}/diagnoses/`)
+            .then(({data:DiagnoseEntry}) => {
+                if(DiagnoseEntry){
+                    setDiagnose(DiagnoseEntry)
+                }
+            })
             .catch(e=>console.error(e));
         }
     },[patient[id]?.id]);
@@ -49,7 +58,10 @@ const PatientPage: React.FC = () => {
                 <p>{entry.date} {entry.description}</p>
                 <ul>
                     {entry.diagnosisCodes?.map((code,index)=>{return(
-                        <li key={index}>{code}</li>
+                        <li key={index}>{code} {diagnose?.map((d,i)=> {
+                            return d.code === code? <span key={i}>{d.name}</span> : null
+                        })}
+                        </li>
                     )})}
                 </ul>
             </div>
