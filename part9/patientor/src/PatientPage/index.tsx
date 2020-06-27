@@ -1,12 +1,16 @@
 import React from "react";
 import axios from "axios";
-import {  Container, Table, Card} from "semantic-ui-react"; 
+import {  Container, Table, Card, Button} from "semantic-ui-react"; 
 import { PatientsEntry } from '../types/Patients';
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, setPatient } from "../state";
 // import { DiagnoseEntry } from '../types/Diagnose';
 import EntryDetails from "./entryDetials";
+import { addEntry } from '../state/reducer';
+import { EntryFormValues } from '../AddPatientModal/AddEntrytForm';
+import { Entry } from "../types/Entry";
+import AddEntryModal from "../AddPatientModal/entryModal";
 
 
 
@@ -14,6 +18,32 @@ const PatientPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     // const [diagnose, setDiagnose]=useState<DiagnoseEntry[]>()
     const [{ patient }, dispatch] = useStateValue();
+
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string | undefined>();
+  
+    const openModal = (): void => setModalOpen(true);
+  
+    const closeModal = (): void => {
+      setModalOpen(false);
+      setError(undefined);
+    };
+  
+    const submitNewPatient = async (values: EntryFormValues) => {
+      try {
+          console.log(values)
+        const { data: newEntry } = await axios.post<Entry>(
+          `${apiBaseUrl}/patients/${id}/entries`,
+          values
+        );
+        dispatch(addEntry(patient[id],newEntry));
+        closeModal();
+      } catch (e) {
+        console.error(e.response.data);
+        setError(e.response.data.error);
+      }
+    };
+
     React.useEffect(() => {
         if(!patient[id]){
             axios.get<PatientsEntry>(`${apiBaseUrl}/patients/${id}`)
@@ -70,6 +100,13 @@ const PatientPage: React.FC = () => {
         )})}
         </Card.Group>
     </Container>
+    <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewPatient}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Patient</Button>
     </div>
     )}
 

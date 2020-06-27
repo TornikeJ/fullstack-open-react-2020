@@ -1,22 +1,30 @@
 import { State } from "./state";
-import { Patient } from "../types";
+// import { Patient } from "../types";
 import { PatientsEntry } from '../types/Patients';
+import { Entry } from "../types/Entry";
 
 export type Action =
   | {
       type: "SET_PATIENT_LIST";
-      payload: Patient[];
+      payload: PatientsEntry[];
     }
   | {
       type: "ADD_PATIENT";
-      payload: Patient;
+      payload: PatientsEntry;
     }
   | {
       type: "SET_PATIENT";
       payload: PatientsEntry;
+    }
+  | {
+      type: "ADD_ENTRY";
+      payload: {
+        patient:PatientsEntry
+        entry:Entry;
+      }
     };
 
-export const setPatientList = (patientList:Patient[]) =>{
+export const setPatientList = (patientList:PatientsEntry[]) =>{
   const action : Action ={
     type:"SET_PATIENT_LIST",
     payload:patientList
@@ -32,10 +40,21 @@ export const setPatient = (patient:PatientsEntry) =>{
   return action
 }
 
-export const addPatient = (patient:Patient) =>{
+export const addPatient = (patient:PatientsEntry) =>{
   const action : Action ={
     type:"ADD_PATIENT",
     payload:patient
+  }
+  return action
+}
+
+export const addEntry = (patient:PatientsEntry,entry:Entry) =>{
+  const action : Action ={
+    type:"ADD_ENTRY",
+    payload:{
+      entry,
+      patient
+    }
   }
   return action
 }
@@ -66,6 +85,22 @@ export const reducer = (state: State, action: Action): State => {
         patients: {
           ...state.patients,
           [action.payload.id]: action.payload
+        }
+      };
+    case "ADD_ENTRY":
+      const patient:PatientsEntry={...action.payload.patient}
+      let updatedEntries : Entry[]
+      if(patient.entries){
+        updatedEntries = [...patient.entries,action.payload.entry]
+      } else{
+        updatedEntries = [action.payload.entry]
+      }
+      const updatedPatient : PatientsEntry = {...patient, entries:[...updatedEntries]}
+      return {
+        ...state,
+        patient: {
+          ...state.patient,
+          [patient.id]:updatedPatient
         }
       };
     default:
