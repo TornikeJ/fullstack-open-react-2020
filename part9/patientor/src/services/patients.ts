@@ -1,5 +1,5 @@
 import { NonSensitivePatientsEntry, PatientsEntry, NewPatientsEntry } from '../types/Patients';
-import patientsData from '../data/patients.json';
+import patientsData from '../data/patients';
 
 const uniqid = require('uniqid');
 

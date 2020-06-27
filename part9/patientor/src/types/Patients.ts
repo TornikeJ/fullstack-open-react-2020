@@ -1,5 +1,4 @@
-export interface Entry {
-}
+import { Entry } from "./Entry";
 
 export interface PatientsEntry {
     "id":string;
