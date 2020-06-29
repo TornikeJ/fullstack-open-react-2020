@@ -8,7 +8,6 @@ import { useStateValue, setPatient } from "../state";
 // import { DiagnoseEntry } from '../types/Diagnose';
 import EntryDetails from "./entryDetials";
 import { addEntry } from '../state/reducer';
-import { EntryFormValues } from '../AddPatientModal/AddEntrytForm';
 import { Entry } from "../types/Entry";
 import AddEntryModal from "../AddPatientModal/entryModal";
 
@@ -29,12 +28,20 @@ const PatientPage: React.FC = () => {
       setError(undefined);
     };
   
-    const submitNewPatient = async (values: EntryFormValues) => {
+    const submitNewEntry = async (values: any) => {
       try {
           console.log(values)
+        let inputEntry={...values}
+        if(inputEntry.type === 'Hospital'){
+            inputEntry={...inputEntry, discharge:{
+                date:values.dischargeDate,
+                citeria:values.dischargeCriteria
+            } }
+        }
+        console.log(inputEntry)
         const { data: newEntry } = await axios.post<Entry>(
           `${apiBaseUrl}/patients/${id}/entries`,
-          values
+          inputEntry
         );
         dispatch(addEntry(patient[id],newEntry));
         closeModal();
@@ -102,7 +109,7 @@ const PatientPage: React.FC = () => {
     </Container>
     <AddEntryModal
         modalOpen={modalOpen}
-        onSubmit={submitNewPatient}
+        onSubmit={submitNewEntry}
         error={error}
         onClose={closeModal}
       />

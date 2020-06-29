@@ -33,23 +33,23 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         gender: Gender.Other
       }}
       onSubmit={onSubmit}
-      validate={values => {
-        const requiredError = "Field is required";
-        const errors: { [field: string]: string } = {};
-        if (!values.name) {
-          errors.name = requiredError;
-        }
-        if (!values.ssn) {
-          errors.ssn = requiredError;
-        }
-        if (!values.dateOfBirth) {
-          errors.dateOfBirth = requiredError;
-        }
-        if (!values.occupation) {
-          errors.occupation = requiredError;
-        }
-        return errors;
-      }}
+        validate={values => {
+          const requiredError = "Field is required";
+          const errors: { [field: string]: string } = {};
+          if (!values.name) {
+            errors.name = requiredError;
+          }
+          if (!values.ssn) {
+            errors.ssn = requiredError;
+          }
+          if (!values.dateOfBirth) {
+            errors.dateOfBirth = requiredError;
+          }
+          if (!values.occupation) {
+            errors.occupation = requiredError;
+          }
+          return errors;
+        }}
     >
       {({ isValid, dirty }) => {
         return (

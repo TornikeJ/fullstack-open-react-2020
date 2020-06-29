@@ -1,12 +1,16 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, Gender } from "../types";
+import { Diagnosis, Gender, TypeOption } from "../types";
 import { HealthCheckRating } from '../types/Entry';
 
 // structure of a single option
 export type GenderOption = {
   value: Gender;
+  label: string;
+};
+export type TypesOption = {
+  value: TypeOption;
   label: string;
 };
 export type HealthCheckOption = {
@@ -19,6 +23,12 @@ type SelectGenderFieldProps = {
   name: string;
   label: string;
   options: GenderOption[];
+};
+
+type SelectTypeFieldProps = {
+  name: string;
+  label: string;
+  options: TypesOption[];
 };
 
 type SelectHealthCheckFieldProps = {
@@ -53,6 +63,23 @@ export const SelectHealthCheckField: React.FC<SelectHealthCheckFieldProps> = ({
     <label>{label}</label>
     <Field as="select" name={name} className="ui dropdown">
       {options.map((option: HealthCheckOption) => (
+        <option key={option.value} value={option.value}>
+          {option.label || option.value}
+        </option>
+      ))}
+    </Field>
+  </Form.Field>
+);
+
+export const SelectTypeField: React.FC<SelectTypeFieldProps> = ({
+  name,
+  label,
+  options
+}: SelectTypeFieldProps) => (
+  <Form.Field>
+    <label>{label}</label>
+    <Field as="select" name={name} className="ui dropdown">
+      {options.map((option: TypesOption) => (
         <option key={option.value} value={option.value}>
           {option.label || option.value}
         </option>

@@ -11,7 +11,10 @@ const toNewEntry = (object:any): Entry => {
     };
 
     const isHealthCheckRating = (param :any) : param is HealthCheckRating => {
-      return Object.values(HealthCheckRating).includes(param);
+      if(!isNaN(Number(param))){
+        return Object.values(HealthCheckRating).includes(+param);
+      }
+      return false;
   }
 
     const isType = (entry: Entry): boolean => {
@@ -78,10 +81,10 @@ const toNewEntry = (object:any): Entry => {
     }
 
     const parseHealthCheck = (data: any): HealthCheckRating => {
-      if (!data || !isHealthCheckRating(data)) {
+      if (!data && data !==0 || !isHealthCheckRating(data)) {
           throw new Error('Incorrect or missing healthCheck: ' + data);
       } 
-      return data;
+      return Number(data);
     };
 
 
